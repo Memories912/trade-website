@@ -1,0 +1,229 @@
+classDiagram
+    direction TB
+
+    class AdminAuthStore {
+        +admin: AdminUser | null
+        +isAuthenticated: boolean
+        +login(email, password) Promise
+        +logout() void
+        +checkAuth() void
+    }
+
+    class AdminUser {
+        +id: string
+        +name: string
+        +email: string
+        +role: string
+        +avatar: string
+    }
+
+    class AdminProductStore {
+        +products: Product[]
+        +categories: Category[]
+        +certifications: Certification[]
+        +loading: boolean
+        +fetchProducts() void
+        +addProduct(data) Product
+        +updateProduct(id, data) Product
+        +deleteProduct(id) void
+        +addCategory(data) Category
+        +updateCategory(id, data) Category
+        +deleteCategory(id) void
+        +addCertification(data) Certification
+        +updateCertification(id, data) Certification
+        +deleteCertification(id) void
+    }
+
+    class Product {
+        +id: string
+        +name_cn: string
+        +name_en: string
+        +name_ko: string
+        +name_ja: string
+        +category: string
+        +image: string
+        +images: string[]
+        +specs: Record~string,string~
+        +moq: string
+        +certifications: string[]
+        +packaging: string
+        +lead_time: string
+        +description_cn: string
+        +description_en: string
+        +description_ko: string
+        +description_ja: string
+        +features: string[]
+        +status: string
+        +createdAt: string
+        +updatedAt: string
+    }
+
+    class Category {
+        +id: string
+        +key: string
+        +icon: string
+        +name_cn: string
+        +name_en: string
+        +name_ko: string
+        +name_ja: string
+        +sortOrder: number
+    }
+
+    class Certification {
+        +id: string
+        +code: string
+        +name: string
+        +icon: string
+    }
+
+    class AdminInquiryStore {
+        +inquiries: Inquiry[]
+        +loading: boolean
+        +fetchInquiries() void
+        +getInquiry(id) Inquiry
+        +updateStatus(id, status) Inquiry
+        +addNote(id, content) Note
+        +addReply(id, content) Reply
+    }
+
+    class Inquiry {
+        +id: string
+        +productId: string
+        +productName: string
+        +customer: CustomerInfo
+        +message: string
+        +status: string
+        +notes: Note[]
+        +replies: Reply[]
+        +createdAt: string
+        +updatedAt: string
+    }
+
+    class Note {
+        +id: string
+        +content: string
+        +author: string
+        +createdAt: string
+    }
+
+    class Reply {
+        +id: string
+        +content: string
+        +sentAt: string
+    }
+
+    class CustomerInfo {
+        +name: string
+        +email: string
+        +company: string
+        +country: string
+    }
+
+    class AdminSourcingStore {
+        +requests: SourcingRequest[]
+        +loading: boolean
+        +fetchRequests() void
+        +getRequest(id) SourcingRequest
+        +updateStatus(id, status) SourcingRequest
+        +addQuote(id, quote) SourcingRequest
+    }
+
+    class SourcingRequest {
+        +id: string
+        +title: string
+        +description: string
+        +customer: CustomerInfo
+        +status: string
+        +quote: Quote | null
+        +createdAt: string
+        +updatedAt: string
+    }
+
+    class Quote {
+        +price: number
+        +currency: string
+        +leadTime: string
+        +notes: string
+        +quotedAt: string
+    }
+
+    class AdminSettingsStore {
+        +companyInfo: CompanyInfo
+        +languages: LanguageConfig[]
+        +updateCompanyInfo(data) void
+        +toggleLanguage(code, enabled) void
+        +setDefaultLanguage(code) void
+    }
+
+    class CompanyInfo {
+        +name_cn: string
+        +name_en: string
+        +name_ko: string
+        +name_ja: string
+        +founded: number
+        +employees: string
+        +annualRevenue: string
+        +headquarters_cn: string
+        +headquarters_en: string
+        +serviceCountries: number
+        +totalClients: number
+        +totalProducts: number
+    }
+
+    class LanguageConfig {
+        +code: string
+        +name: string
+        +enabled: boolean
+        +isDefault: boolean
+    }
+
+    class MockUser {
+        +id: string
+        +name: string
+        +email: string
+        +company: string
+        +country: string
+        +avatar: string
+        +status: string
+        +createdAt: string
+    }
+
+    class ChatRecord {
+        +userId: string
+        +userName: string
+        +messages: ChatMessage[]
+    }
+
+    class ChatMessage {
+        +id: string
+        +role: string
+        +content: string
+        +timestamp: string
+    }
+
+    class FAQItem {
+        +id: string
+        +q_cn: string
+        +q_en: string
+        +q_ko: string
+        +q_ja: string
+        +a_cn: string
+        +a_en: string
+        +a_ko: string
+        +a_ja: string
+        +tags: string[]
+    }
+
+    AdminAuthStore --> AdminUser : manages
+    AdminProductStore --> Product : manages
+    AdminProductStore --> Category : manages
+    AdminProductStore --> Certification : manages
+    AdminInquiryStore --> Inquiry : manages
+    Inquiry --> CustomerInfo : contains
+    Inquiry --> Note : has many
+    Inquiry --> Reply : has many
+    AdminSourcingStore --> SourcingRequest : manages
+    SourcingRequest --> CustomerInfo : contains
+    SourcingRequest --> Quote : may have
+    AdminSettingsStore --> CompanyInfo : manages
+    AdminSettingsStore --> LanguageConfig : manages

@@ -1,0 +1,97 @@
+sequenceDiagram
+    actor Admin as 管理员
+    participant Router as Vue Router
+    participant Guard as 路由守卫
+    participant Login as AdminLogin.vue
+    participant AuthStore as adminAuth Store
+    participant Storage as localStorage
+
+    Admin->>Router: 访问 /admin/dashboard
+    Router->>Guard: beforeEach 全局守卫
+    Guard->>AuthStore: 检查 isAuthenticated
+    AuthStore-->>Guard: false（未登录）
+    Guard-->>Router: 重定向 /admin/login
+
+    Admin->>Login: 输入邮箱密码，点击登录
+    Login->>AuthStore: login(email, password)
+    AuthStore->>AuthStore: Mock 验证 (admin@trade.com / admin123)
+    AuthStore->>Storage: 存储 admin-token
+    AuthStore-->>Login: 返回 AdminUser 对象
+    Login->>Router: router.push('/admin/dashboard')
+
+    Router->>Guard: beforeEach 全局守卫
+    Guard->>AuthStore: 检查 isAuthenticated
+    AuthStore-->>Guard: true（已登录）
+    Guard-->>Router: 放行
+    Router-->>Admin: 显示仪表盘页面
+
+---
+
+sequenceDiagram
+    actor Admin as 管理员
+    participant View as ProductList.vue
+    participant Store as adminProduct Store
+    participant Mock as admin Mock 数据
+    participant Form as ProductForm.vue
+
+    Admin->>View: 进入产品列表页
+    View->>Store: fetchProducts()
+    Store->>Mock: 读取 mockProducts
+    Mock-->>Store: 返回产品数组
+    Store-->>View: 响应式 products 数据
+    View-->>Admin: 渲染表格
+
+    Admin->>View: 点击"新增产品"
+    View->>Form: 打开新增表单（Drawer/页面）
+    Admin->>Form: 填写产品信息（多语言Tab切换）
+    Form->>Store: addProduct(formData)
+    Store->>Mock: 推入新产品对象
+    Store-->>Form: 返回新建产品
+    Form-->>View: 关闭表单，刷新列表
+
+    Admin->>View: 点击某产品"编辑"
+    View->>Form: 打开编辑表单（传入产品数据）
+    Admin->>Form: 修改产品信息
+    Form->>Store: updateProduct(id, formData)
+    Store->>Mock: 更新对应产品
+    Store-->>Form: 返回更新产品
+    Form-->>View: 关闭表单，刷新列表
+
+    Admin->>View: 点击某产品"删除"
+    View->>Store: deleteProduct(id)
+    Store->>Mock: 过滤移除该产品
+    Store-->>View: 列表自动更新
+
+---
+
+sequenceDiagram
+    participant Router as Vue Router
+    participant Guard as beforeEach 守卫
+    participant AuthStore as adminAuth Store
+    participant AdminLayout as AdminLayout
+    participant UserLayout as App.vue 用户端布局
+
+    Note over Router,Guard: 任何路由跳转触发
+
+    Router->>Guard: to, from, next
+    Guard->>Guard: 判断 to.path 是否以 /admin 开头
+
+    alt 路由以 /admin 开头
+        Guard->>AuthStore: 检查 isAuthenticated
+        alt to.path === '/admin/login'
+            Guard->>AuthStore: 已登录？
+            alt 已登录
+                Guard-->>Router: 重定向 /admin/dashboard
+            else 未登录
+                Guard-->>Router: 放行到登录页
+            end
+        else 其他 admin 路由
+            alt 已登录
+                Guard-->>Router: 放行
+            else 未登录
+                Guard-->>Router: 重定向 /admin/login
+            end
+        end
+    else 用户端路由
+        Guard-->>Router: 直接放行
+    end

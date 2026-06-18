@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Trade Website - 产品图片墙</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #111;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    width: 100vw;
+    height: 100vh;
+  }
+  .card {
+    position: relative;
+    overflow: hidden;
+    background: #1a1a1a;
+    cursor: pointer;
+  }
+  .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .card:hover img { transform: scale(1.1); }
+  .card .info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 12px;
+    background: linear-gradient(transparent, rgba(0,0,0,.85));
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .card:hover .info { opacity: 1; }
+  .card .info .name {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .card .info .cat {
+    color: rgba(255,255,255,.6);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Lightbox */
+  .lb {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.95);
+    justify-content: center;
+    align-items: center;
+  }
+  .lb.active { display: flex; }
+  .lb img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .lb .close {
+    position: absolute;
+    top: 16px; right: 20px;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    opacity: .6;
+    background: none;
+    border: none;
+  }
+  .lb .close:hover { opacity: 1; }
+  .lb .nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    color: #fff;
+    font-size: 36px;
+    cursor: pointer;
+    opacity: .4;
+    background: rgba(0,0,0,.3);
+    border: none;
+    padding: 14px 10px;
+    border-radius: 6px;
+  }
+  .lb .nav:hover { opacity: .9; }
+  .lb .prev { left: 10px; }
+  .lb .next { right: 10px; }
+</style>
+</head>
+<body>
+
+<div class="grid" id="g"></div>
+<div class="lb" id="lb">
+  <button class="close" id="lbClose">&times;</button>
+  <button class="nav prev" id="lbPrev">&#8249;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="nav next" id="lbNext">&#8250;</button>
+</div>
+
+<script>
+const products = [
+  { n:'18V 无刷冲击钻', c:'🔧 电动工具', img:'https://picsum.photos/seed/drilla/600/600' },
+  { n:'5.5L 数码空气炸锅', c:'🔌 家电', img:'https://picsum.photos/seed/sawa/600/600' },
+  { n:'专业酒精测试仪', c:'📋 检测仪器', img:'https://picsum.photos/seed/grindera/600/600' },
+  { n:'16线激光水平仪', c:'💡 激光仪器', img:'https://picsum.photos/seed/washera/600/600' },
+  { n:'高压清洗机 2000PSI', c:'🧹 清洁设备', img:'https://picsum.photos/seed/vacuuma/600/600' },
+  { n:'潜水泵 1.5HP', c:'💧 泵类', img:'https://picsum.photos/seed/metera/600/600' },
+  { n:'4.5" 无刷角磨机', c:'🔧 电动工具', img:'https://picsum.photos/seed/sensora/600/600' },
+  { n:'超声波加湿器 5L', c:'🔌 家电', img:'https://picsum.photos/seed/cleanera/600/600' },
+  { n:'7-1/4" 电圆锯 1650W', c:'🔧 电动工具', img:'https://picsum.photos/seed/polisha/600/600' },
+  { n:'慢磨原汁机', c:'🔌 家电', img:'https://picsum.photos/seed/compressa/600/600' },
+  { n:'四合一气体检测仪', c:'📋 检测仪器', img:'https://picsum.photos/seed/generata/600/600' },
+  { n:'旋转激光水平仪', c:'💡 激光仪器', img:'https://picsum.photos/seed/mixera/600/600' },
+  { n:'蒸汽清洁机 1500W', c:'🧹 清洁设备', img:'https://picsum.photos/seed/kettlea/600/600' },
+  { n:'污水潜水泵 0.75HP', c:'💧 泵类', img:'https://picsum.photos/seed/gaugea/600/600' },
+  { n:'多功能震动工具 300W', c:'🔧 电动工具', img:'https://picsum.photos/seed/thermoa/600/600' },
+  { n:'电动咖啡研磨机', c:'🔌 家电', img:'https://picsum.photos/seed/lasera/600/600' },
+];
+
+let idx = 0;
+
+const g = document.getElementById('g');
+g.innerHTML = products.map((p,i) => `
+  <div class="card" onclick="openLb(${i})">
+    <img src="${p.img}" alt="${p.n}" loading="lazy">
+    <div class="info"><div class="name">${p.n}</div><div class="cat">${p.c}</div></div>
+  </div>
+`).join('');
+
+function openLb(i) { idx=i; document.getElementById('lbImg').src=products[i].img; document.getElementById('lb').classList.add('active'); }
+
+document.getElementById('lbClose').onclick = () => document.getElementById('lb').classList.remove('active');
+document.getElementById('lbPrev').onclick = () => { idx=(idx-1+products.length)%products.length; document.getElementById('lbImg').src=products[idx].img; };
+document.getElementById('lbNext').onclick = () => { idx=(idx+1)%products.length; document.getElementById('lbImg').src=products[idx].img; };
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') document.getElementById('lb').classList.remove('active');
+  if(e.key==='ArrowLeft') { idx=(idx-1+products.length)%products.length; document.getElementById('lbImg').src=products[idx].img; }
+  if(e.key==='ArrowRight') { idx=(idx+1)%products.length; document.getElementById('lbImg').src=products[idx].img; }
+});
+</script>
+</body>
+</html>
