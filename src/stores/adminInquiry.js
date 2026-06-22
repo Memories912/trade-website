@@ -8,6 +8,7 @@ export const useAdminInquiryStore = defineStore('adminInquiry', () => {
 
   const pendingCount = computed(() => inquiries.value.filter(i => i.status === 'pending').length)
   const totalCount = computed(() => inquiries.value.length)
+  const totalUnread = computed(() => inquiries.value.reduce((sum, i) => sum + (i.unreadMessages || 0), 0))
 
   /** Simulate fetching inquiries */
   function fetchInquiries() {
@@ -65,8 +66,16 @@ export const useAdminInquiryStore = defineStore('adminInquiry', () => {
     return null
   }
 
+  /** Mark user messages as read */
+  function markAsRead(id) {
+    const idx = inquiries.value.findIndex(i => i.id === id)
+    if (idx !== -1) {
+      inquiries.value[idx].unreadMessages = 0
+    }
+  }
+
   return {
-    inquiries, loading, pendingCount, totalCount,
-    fetchInquiries, getInquiry, updateStatus, addNote, addReply,
+    inquiries, loading, pendingCount, totalCount, totalUnread,
+    fetchInquiries, getInquiry, updateStatus, addNote, addReply, markAsRead,
   }
 })

@@ -22,6 +22,15 @@
                 </svg>
                 {{ $t('nav.my_inquiries') }}
               </router-link>
+              <router-link to="/user/sourcing"
+                class="flex items-center gap-3 px-4 py-3 text-sm rounded-lg transition-colors"
+                :class="$route.path === '/user/sourcing' ? 'text-beike-primary bg-beike-primary-light font-bold' : 'text-beike-body hover:bg-gray-50'">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                {{ $t('nav.my_sourcing') }}
+              </router-link>
             </div>
           </div>
         </aside>

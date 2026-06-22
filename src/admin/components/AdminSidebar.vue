@@ -10,9 +10,9 @@
     <div class="h-16 flex items-center px-4 border-b border-white/10 shrink-0">
       <router-link to="/admin/dashboard" class="flex items-center gap-2 overflow-hidden">
         <div class="w-8 h-8 rounded-lg bg-beike-primary flex items-center justify-center shrink-0">
-          <span class="text-white font-bold text-sm">GT</span>
+          <span class="text-white font-bold text-sm">燕</span>
         </div>
-        <span v-if="!collapsed" class="text-lg font-semibold whitespace-nowrap">GlobalTrade</span>
+        <span v-if="!collapsed" class="text-lg font-semibold whitespace-nowrap">燕臻进出口</span>
       </router-link>
     </div>
 

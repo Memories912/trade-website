@@ -22,10 +22,10 @@
                 v-for="cat in categories"
                 :key="cat.id"
                 @click="selectCategory(cat.id)"
-                class="block w-full text-left px-3 py-2.5 text-sm rounded-lg transition-colors"
+                class="flex w-full items-center gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors"
                 :class="selectedCategory === cat.id ? 'text-beike-primary bg-beike-primary-light font-bold' : 'text-beike-body hover:bg-gray-50'"
               >
-                <span class="mr-1.5">{{ cat.icon }}</span>
+                <component :is="iconMap[cat.icon] || iconMap['package']" class="w-4 h-4" />
                 {{ catName(cat) }}
               </button>
             </div>
@@ -81,17 +81,24 @@
                 </span>
                 <h3 class="text-sm font-bold text-beike-heading line-clamp-1 mb-1">{{ productName(product) }}</h3>
                 <p class="text-xs text-beike-light line-clamp-2 mb-3">{{ productDescription(product) }}</p>
-                <div class="flex items-center justify-center gap-3 text-xs text-beike-muted">
+                <!-- Price Range -->
+                <div v-if="product.price_range" class="text-sm font-bold text-beike-primary mb-2">{{ product.price_range }}</div>
+                <div class="flex items-center justify-center gap-3 text-xs text-beike-muted mb-3">
                   <span class="badge-gray">MOQ: {{ product.moq }}</span>
                   <span class="badge-gray">{{ product.lead_time }}</span>
                 </div>
+                <router-link :to="`/products/${product.id}`" class="btn-primary-custom text-xs px-4 py-2 w-full justify-center inline-flex">
+                  {{ $t('products.inquiry_now') }}
+                </router-link>
               </div>
             </div>
           </div>
 
           <!-- Empty state -->
           <div v-else class="text-center py-20">
-            <div class="text-5xl mb-4">📦</div>
+            <div class="text-5xl mb-4 text-beike-light">
+              <Package class="w-12 h-12 mx-auto" />
+            </div>
             <h3 class="text-lg font-bold text-beike-heading mb-1">{{ $t('products.no_products_found') }}</h3>
             <p class="text-sm text-beike-muted">{{ $t('products.try_different') }}</p>
           </div>
@@ -136,17 +143,30 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { products, categories } from '@/assets/mock/products'
 import { useFavoriteStore } from '@/stores/favorites'
+import { Package, Zap, Plug, Search, SprayCan, Crosshair, Cog, Gauge, Droplet } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
 const favStore = useFavoriteStore()
 
+const iconMap = {
+  'package': Package,
+  'zap': Zap,
+  'plug': Plug,
+  'search': Search,
+  'spray-can': SprayCan,
+  'crosshair': Crosshair,
+  'cog': Cog,
+  'gauge': Gauge,
+  'droplet': Droplet,
+}
+
 const PAGE_SIZE = 6
 const currentPage = ref(1)
 const selectedCategory = ref('')
 
-const fallbackImg = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect fill='%23f1f5f9' width='600' height='400'/><text x='300' y='210' text-anchor='middle' fill='%2394a3b8' font-size='20'>📷</text></svg>`)}`
+const fallbackImg = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect fill='%23f1f5f9' width='600' height='400'/><text x='300' y='210' text-anchor='middle' fill='%2394a3b8' font-size='20'>Image</text></svg>`)}`
 function onImgError(e) { e.target.src = fallbackImg }
 
 // Read category from query params
@@ -164,7 +184,7 @@ watch(() => route.query.category, (val) => {
 })
 
 const filteredProducts = computed(() => {
-  let list = [...products]
+  let list = [...products.filter(p => p.status !== 'inactive')]
   if (selectedCategory.value && selectedCategory.value !== 'all') {
     list = list.filter(p => p.category === selectedCategory.value)
   }

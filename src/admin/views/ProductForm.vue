@@ -87,7 +87,7 @@
               class="w-full px-3 py-2.5 rounded-lg border border-beike-border text-sm focus:border-beike-primary outline-none"
             >
               <option v-for="cat in productStore.categories.filter(c => c.id !== 'all')" :key="cat.id" :value="cat.id">
-                {{ cat.key }}
+                {{ cat.name_cn }}
               </option>
             </select>
           </div>
@@ -107,7 +107,7 @@
             <label class="block text-xs font-medium text-beike-body mb-1">{{ t('admin.products.status') }}</label>
             <select v-model="form.status" class="w-full px-3 py-2.5 rounded-lg border border-beike-border text-sm focus:border-beike-primary outline-none">
               <option value="active">{{ t('admin.status.active') }}</option>
-              <option value="draft">{{ t('admin.status.draft') }}</option>
+              <option value="inactive">{{ t('admin.status.inactive') }}</option>
             </select>
           </div>
         </div>

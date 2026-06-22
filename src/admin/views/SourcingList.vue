@@ -14,7 +14,7 @@
       </div>
       <select
         v-model="list.filters.value.status"
-        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none transition-colors"
+        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none appearance-none transition-colors"
         :class="list.filters.value.status ? 'text-beike-body' : 'text-gray-400'"
       >
         <option value="">{{ t('admin.sourcing.all_status') }}</option>

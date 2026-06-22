@@ -218,11 +218,11 @@ const detailTab = ref('desc')
 const fallbackImg = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect fill='%23f1f5f9' width='600' height='400'/><text x='300' y='210' text-anchor='middle' fill='%2394a3b8' font-size='20'>📷</text></svg>`)}`
 function onImgError(e) { e.target.src = fallbackImg }
 
-const product = computed(() => products.find(p => p.id === route.params.id))
+const product = computed(() => products.find(p => p.id === route.params.id && p.status !== 'inactive'))
 
 const relatedProducts = computed(() => {
   if (!product.value) return []
-  return products.filter(p => p.category === product.value.category && p.id !== product.value.id).slice(0, 4)
+  return products.filter(p => p.category === product.value.category && p.id !== product.value.id && p.status !== 'inactive').slice(0, 4)
 })
 
 const specs = computed(() => {

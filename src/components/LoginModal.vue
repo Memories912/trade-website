@@ -1,112 +1,101 @@
 <template>
-  <div>
-    <Transition name="fade">
-      <div v-if="visible" class="fixed inset-0 z-[70] bg-black/40 backdrop-blur-sm" @click="$emit('close')"></div>
-    </Transition>
-    <Transition name="scale">
-      <div v-if="visible" class="fixed inset-0 z-[80] flex items-center justify-center p-4">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden relative">
-          <!-- Tabs -->
-          <div class="flex border-b border-gray-100">
-            <button
-              v-for="tab in tabs" :key="tab.key"
-              @click="activeTab = tab.key"
-              class="flex-1 py-4 text-sm font-bold transition-colors relative"
-              :class="activeTab === tab.key ? 'text-beike-primary' : 'text-beike-muted hover:text-beike-body'"
-            >
-              {{ tab.labelKey ? $t(tab.labelKey) : tab.label }}
-              <span v-if="activeTab === tab.key" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-beike-primary rounded-full"></span>
+  <div class="login-modal" :class="{ 'is-open': visible }">
+    <div class="modal-backdrop" @click="$emit('close')"></div>
+    <div class="modal-content">
+      <div class="flex border-b border-gray-100">
+        <button
+          v-for="tab in tabs" :key="tab.key"
+          @click="activeTab = tab.key"
+          class="flex-1 py-4 text-sm font-bold transition-colors relative"
+          :class="activeTab === tab.key ? 'text-beike-primary' : 'text-beike-muted hover:text-beike-body'"
+        >
+          {{ tab.labelKey ? $t(tab.labelKey) : tab.label }}
+          <span v-if="activeTab === tab.key" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-beike-primary rounded-full"></span>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <form v-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.email") }}</label>
+            <input v-model="loginForm.email" type="email" class="input-custom" placeholder="your@email.com" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.password") }}</label>
+            <input v-model="loginForm.password" type="password" class="input-custom" placeholder="••••••••" required />
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-1.5 text-beike-muted cursor-pointer">
+              <input type="checkbox" class="rounded border-gray-300 text-beike-primary focus:ring-beike-primary" />
+              {{ $t('common.remember_me') }}
+            </label>
+            <span class="text-beike-primary hover:underline cursor-pointer text-xs">{{ $t('common.forgot_password') }}</span>
+          </div>
+          <button type="submit" :disabled="loginLoading" class="btn-primary-custom w-full justify-center py-3">
+            <svg v-if="loginLoading" class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            <span v-else>{{ $t('nav.sign_in') }}</span>
+          </button>
+          <p v-if="loginError" class="text-xs text-red-500 text-center">{{ loginError }}</p>
+
+          <div class="relative my-5">
+            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+            <div class="relative flex justify-center"><span class="bg-white px-3 text-xs text-beike-light">{{ $t('common.or_continue') }}</span></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button v-for="s in socialLogin" :key="s.id" type="button"
+              class="social-btn flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all"
+              :style="{ background: s.bg, color: s.color, border: s.bg === '#fff' ? '1.5px solid #e5e7eb' : 'none' }"
+              @click="socialClick(s.id)">
+              <span v-html="s.icon" class="w-5 h-5 flex items-center justify-center"></span>
+              <span>{{ s.label }}</span>
             </button>
           </div>
+        </form>
 
-          <div class="p-6">
-            <!-- Login Form -->
-            <form v-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.email") }}</label>
-                <input v-model="loginForm.email" type="email" class="input-custom" placeholder="your@email.com" required />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.password") }}</label>
-                <input v-model="loginForm.password" type="password" class="input-custom" placeholder="••••••••" required />
-              </div>
-              <div class="flex items-center justify-between text-sm">
-                <label class="flex items-center gap-1.5 text-beike-muted cursor-pointer">
-                  <input type="checkbox" class="rounded border-gray-300 text-beike-primary focus:ring-beike-primary" />
-                  {{ $t('common.remember_me') }}
-                </label>
-                <span class="text-beike-primary hover:underline cursor-pointer text-xs">{{ $t('common.forgot_password') }}</span>
-              </div>
-              <button type="submit" :disabled="loginLoading" class="btn-primary-custom w-full justify-center py-3">
-                <svg v-if="loginLoading" class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                <span v-else>{{ $t('nav.sign_in') }}</span>
-              </button>
-              <p v-if="loginError" class="text-xs text-red-500 text-center">{{ loginError }}</p>
-
-              <!-- Social Login -->
-              <div class="relative my-5">
-                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-                <div class="relative flex justify-center"><span class="bg-white px-3 text-xs text-beike-light">{{ $t('common.or_continue') }}</span></div>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <button v-for="s in socialLogin" :key="s.id" type="button"
-                  class="social-btn flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all"
-                  :style="{ background: s.bg, color: s.color, border: s.bg === '#fff' ? '1.5px solid #e5e7eb' : 'none' }"
-                  @click="socialClick(s.id)">
-                  <span v-html="s.icon" class="w-5 h-5 flex items-center justify-center"></span>
-                  <span>{{ s.label }}</span>
-                </button>
-              </div>
-            </form>
-
-            <!-- Register Form -->
-            <form v-else @submit.prevent="handleRegister" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.username") }} <span class="text-red-400">*</span></label>
-                <input v-model="regForm.name" class="input-custom" :placeholder="$t('common.username_placeholder')" required />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.email") }} <span class="text-red-400">*</span></label>
-                <input v-model="regForm.email" type="email" class="input-custom" placeholder="your@email.com" required />
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.password") }} <span class="text-red-400">*</span></label>
-                  <input v-model="regForm.password" type="password" class="input-custom" placeholder="••••••••" required />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.country") }}</label>
-                  <select v-model="regForm.country" class="select-custom">
-                    <option value="Korea">{{ $t('inquiry.countries.korea') }}</option>
-                    <option value="Japan">{{ $t('inquiry.countries.japan') }}</option>
-                    <option value="USA">{{ $t("inquiry.countries.usa") }}</option>
-                    <option value="Europe">{{ $t('inquiry.countries.europe') }}</option>
-                    <option value="Other">{{ $t('inquiry.countries.other') }}</option>
-                  </select>
-                </div>
-              </div>
-              <button type="submit" :disabled="regLoading" class="btn-primary-custom w-full justify-center py-3">
-                <svg v-if="regLoading" class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                <span v-else>{{ $t('common.create_account') }}</span>
-              </button>
-              <p v-if="regError" class="text-xs text-red-500 text-center">{{ regError }}</p>
-            </form>
+        <form v-else @submit.prevent="handleRegister" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.username") }} <span class="text-red-400">*</span></label>
+            <input v-model="regForm.name" class="input-custom" :placeholder="$t('common.username_placeholder')" required />
           </div>
-
-          <!-- Close -->
-          <button @click="$emit('close')" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-beike-light hover:text-beike-body hover:bg-gray-100 transition-all">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+          <div>
+            <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.email") }} <span class="text-red-400">*</span></label>
+            <input v-model="regForm.email" type="email" class="input-custom" placeholder="your@email.com" required />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.password") }} <span class="text-red-400">*</span></label>
+              <input v-model="regForm.password" type="password" class="input-custom" placeholder="••••••••" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.country") }}</label>
+              <select v-model="regForm.country" class="select-custom">
+                <option value="Korea">{{ $t('inquiry.countries.korea') }}</option>
+                <option value="Japan">{{ $t('inquiry.countries.japan') }}</option>
+                <option value="USA">{{ $t("inquiry.countries.usa") }}</option>
+                <option value="Europe">{{ $t('inquiry.countries.europe') }}</option>
+                <option value="Other">{{ $t('inquiry.countries.other') }}</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" :disabled="regLoading" class="btn-primary-custom w-full justify-center py-3">
+            <svg v-if="regLoading" class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            <span v-else>{{ $t('common.create_account') }}</span>
           </button>
-        </div>
+          <p v-if="regError" class="text-xs text-red-500 text-center">{{ regError }}</p>
+        </form>
       </div>
-    </Transition>
+
+      <button @click="$emit('close')" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-beike-light hover:text-beike-body hover:bg-gray-100 transition-all">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t, locale } = useI18n()
 import { useUserStore } from '@/stores/user'
@@ -153,8 +142,6 @@ const socialLogin = computed(() => {
 
 function socialClick(id) {
   console.log('Social login:', id)
-  // In production: redirect to OAuth provider
-  // For demo, simulate success
   alert(t('common.social_coming') + ' ' + id)
 }
 
@@ -171,6 +158,11 @@ const loginError = ref('')
 const regForm = reactive({ name: '', company: '', email: '', password: '', country: '' })
 const regLoading = ref(false)
 const regError = ref('')
+
+// Lock body scroll when modal is open
+watch(() => props.visible, (val) => {
+  document.body.style.overflow = val ? 'hidden' : ''
+})
 
 async function handleLogin() {
   loginLoading.value = true
@@ -202,10 +194,42 @@ async function handleRegister() {
 </script>
 
 <style scoped>
-.scale-enter-active { transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.scale-leave-active { transition: all 0.15s ease-in; }
-.scale-enter-from { opacity: 0; transform: scale(0.9) translateY(20px); }
-.scale-leave-to { opacity: 0; transform: scale(0.95); }
+.login-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+}
+.login-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+}
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  overflow: hidden;
+  transform: scale(0.92) translateY(16px);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+.login-modal.is-open .modal-content {
+  transform: scale(1) translateY(0);
+}
 
 .social-btn {
   cursor: pointer;

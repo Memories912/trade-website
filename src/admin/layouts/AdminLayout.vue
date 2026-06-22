@@ -3,8 +3,8 @@
     <!-- Desktop sidebar -->
     <aside class="admin-sidebar">
       <div class="admin-logo">
-        <div class="logo-icon">GT</div>
-        <span class="logo-text">GlobalTrade</span>
+        <div class="logo-icon">燕</div>
+        <span class="logo-text">燕臻进出口</span>
       </div>
       <nav class="admin-nav">
         <router-link
@@ -27,8 +27,8 @@
     <div v-if="mobileOpen" class="mobile-overlay" @click="mobileOpen = false"></div>
     <aside v-if="mobileOpen" class="mobile-sidebar">
       <div class="admin-logo">
-        <div class="logo-icon">GT</div>
-        <span class="logo-text">GlobalTrade</span>
+        <div class="logo-icon">燕</div>
+        <span class="logo-text">燕臻进出口</span>
         <button class="ml-auto text-white/50 hover:text-white" @click="mobileOpen = false">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -66,16 +66,6 @@
           </nav>
         </div>
         <div class="topbar-right">
-          <!-- Language switcher -->
-          <div class="dd-wrap" ref="refLang">
-            <button class="tb-btn" @click="langOpen = !langOpen" title="Language">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              <span class="lang-lbl">{{ currentLang }}</span>
-            </button>
-            <div v-if="langOpen" class="dd" @click.stop>
-              <button v-for="l in langs" :key="l.code" class="dd-item" :class="{ active: locale === l.code }" @click="switchLang(l.code)">{{ l.label }}</button>
-            </div>
-          </div>
           <!-- Notifications -->
           <div class="dd-wrap" ref="refNotif">
             <button class="tb-btn" @click="notifOpen = !notifOpen" title="Notifications">
@@ -137,16 +127,14 @@ import { useI18n } from 'vue-i18n'
 import { useAdminAuth } from '@/admin/composables/useAdminAuth'
 
 const route = useRoute()
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const { logout, checkAuth, adminUser } = useAdminAuth()
 
 const mobileOpen = ref(false)
-const langOpen = ref(false)
 const notifOpen = ref(false)
 const adminOpen = ref(false)
 const isFS = ref(false)
 
-const refLang = ref(null)
 const refNotif = ref(null)
 const refAdmin = ref(null)
 
@@ -191,21 +179,6 @@ const titleMap = {
 }
 const pageTitle = computed(() => t(titleMap[route.path] || 'Admin'))
 
-// Language
-const langs = [
-  { code: 'zh', label: '简体中文' },
-  { code: 'en', label: 'English' },
-  { code: 'ko', label: '한국어' },
-  { code: 'ja', label: '日本語' },
-]
-const currentLang = computed(() => langs.find(l => l.code === locale.value)?.label.substring(0, 2) || 'EN')
-function switchLang(code) {
-  locale.value = code
-  localStorage.setItem('locale', code)
-  document.documentElement.lang = code
-  langOpen.value = false
-}
-
 // Admin user
 const adminName = computed(() => adminUser.value?.name || 'Admin')
 const adminEmail = computed(() => adminUser.value?.email || '')
@@ -227,7 +200,6 @@ function onFSChange() { isFS.value = !!document.fullscreenElement }
 
 // Close dropdowns on outside click
 function closeAll(e) {
-  if (refLang.value && !refLang.value.contains(e.target)) langOpen.value = false
   if (refNotif.value && !refNotif.value.contains(e.target)) notifOpen.value = false
   if (refAdmin.value && !refAdmin.value.contains(e.target)) adminOpen.value = false
 }

@@ -9,28 +9,51 @@ export const useUserStore = defineStore('user', () => {
 
   const isLoggedIn = computed(() => !!user.value)
 
+  // Demo account
+  const DEMO_ACCOUNT = {
+    email: 'demo@yanzhen.com',
+    password: 'demo123',
+    name: '燕臻进出口',
+    company: '燕臻进出口有限公司',
+    country: 'China',
+  }
+
   // Mock login
   function login(email, password) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (email && password) {
+        if (email === DEMO_ACCOUNT.email && password === DEMO_ACCOUNT.password) {
           const mockUser = {
-            id: 'u_001',
-            name: 'Demo User',
-            email: email,
-            company: 'ABC Trading Co.',
-            country: 'Korea',
+            id: 'u_demo',
+            name: DEMO_ACCOUNT.name,
+            email: DEMO_ACCOUNT.email,
+            company: DEMO_ACCOUNT.company,
+            country: DEMO_ACCOUNT.country,
             avatar: null,
             createdAt: '2026-01-15',
           }
           user.value = mockUser
-          token.value = 'mock-token-xxx'
-          localStorage.setItem('auth-token', 'mock-token-xxx')
+          token.value = 'mock-token-demo'
+          localStorage.setItem('auth-token', 'mock-token-demo')
+          resolve(mockUser)
+        } else if (email && password) {
+          const mockUser = {
+            id: 'u_' + Date.now(),
+            name: email.split('@')[0],
+            email: email,
+            company: '',
+            country: '',
+            avatar: null,
+            createdAt: '2026-01-15',
+          }
+          user.value = mockUser
+          token.value = 'mock-token-' + Date.now()
+          localStorage.setItem('auth-token', token.value)
           resolve(mockUser)
         } else {
-          reject(new Error('Login failed'))
+          reject(new Error('邮箱或密码错误'))
         }
-      }, 800)
+      }, 500)
     })
   }
 
@@ -70,11 +93,11 @@ export const useUserStore = defineStore('user', () => {
     if (token.value) {
       // Mock: restore session
       user.value = {
-        id: 'u_001',
-        name: 'Demo User',
-        email: 'demo@example.com',
-        company: 'ABC Trading Co.',
-        country: 'Korea',
+        id: 'u_demo',
+        name: DEMO_ACCOUNT.name,
+        email: DEMO_ACCOUNT.email,
+        company: DEMO_ACCOUNT.company,
+        country: DEMO_ACCOUNT.country,
         avatar: null,
         createdAt: '2026-01-15',
       }

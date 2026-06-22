@@ -5,7 +5,9 @@
       <div class="container-custom py-6">
         <div class="grid grid-cols-4 gap-6">
           <div v-for="s in services" :key="s.titleKey" class="flex items-center gap-3">
-            <div class="text-2xl shrink-0">{{ s.icon }}</div>
+            <div class="w-10 h-10 rounded-full bg-beike-primary-light flex items-center justify-center shrink-0">
+              <component :is="iconMap[s.icon]" class="w-5 h-5 text-beike-primary" />
+            </div>
             <div>
               <div class="text-sm font-bold text-beike-heading">{{ t(s.titleKey) }}</div>
               <div class="text-xs text-beike-light">{{ t(s.subKey) }}</div>
@@ -21,8 +23,12 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-2 mb-4">
-            <div class="w-8 h-8 rounded-lg bg-beike-primary flex items-center justify-center text-white font-bold text-lg">
-              B
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-beike-primary to-[#ff7a2f] flex items-center justify-center shadow-sm">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M19 5l-3 3 3 3M5 19l3-3-3-3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </div>
             <div>
               <div class="text-base font-bold text-beike-heading leading-tight">{{ $t('nav.brand_name') }}</div>
@@ -89,8 +95,9 @@
           <ul class="space-y-2">
             <li v-for="cat in footerCategories" :key="cat.id">
               <router-link :to="{ path: '/products', query: { category: cat.id } }"
-                          class="text-sm text-beike-muted hover:text-beike-primary transition-colors">
-                {{ catIcon(cat.icon) }} {{ catName(cat) }}
+                          class="text-sm text-beike-muted hover:text-beike-primary transition-colors inline-flex items-center gap-1.5">
+                <component :is="iconMap[cat.icon] || iconMap['package']" class="w-4 h-4" />
+                {{ catName(cat) }}
               </router-link>
             </li>
           </ul>
@@ -117,7 +124,7 @@
               <svg class="w-4 h-4 text-beike-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span class="text-sm text-beike-muted">{{ $t("topbar.email") }}</span>
+              <span class="text-sm text-beike-muted">{{ $t("topbar.email").replace('[at]', '@') }}</span>
             </li>
             <li class="flex items-center gap-2.5">
               <svg class="w-4 h-4 text-beike-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -146,15 +153,28 @@
 <script setup>
 import { categories } from '@/assets/mock/products'
 
+import { Truck, Lock, RotateCcw, MessageCircle, Package, Zap, Plug, Gauge } from 'lucide-vue-next'
+
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
+const iconMap = {
+  'truck': Truck,
+  'lock': Lock,
+  'rotate-ccw': RotateCcw,
+  'message-circle': MessageCircle,
+  'package': Package,
+  'zap': Zap,
+  'plug': Plug,
+  'gauge': Gauge,
+}
+
 const services = [
-  { icon: '🚚', titleKey: 'footer.service_free_shipping', subKey: 'footer.service_free_shipping_sub' },
-  { icon: '🔒', titleKey: 'footer.service_secure_payment', subKey: 'footer.service_secure_payment_sub' },
-  { icon: '🔄', titleKey: 'footer.service_easy_return', subKey: 'footer.service_easy_return_sub' },
-  { icon: '💬', titleKey: 'footer.service_support', subKey: 'footer.service_support_sub' },
+  { icon: 'truck', titleKey: 'footer.service_free_shipping', subKey: 'footer.service_free_shipping_sub' },
+  { icon: 'lock', titleKey: 'footer.service_secure_payment', subKey: 'footer.service_secure_payment_sub' },
+  { icon: 'rotate-ccw', titleKey: 'footer.service_easy_return', subKey: 'footer.service_easy_return_sub' },
+  { icon: 'message-circle', titleKey: 'footer.service_support', subKey: 'footer.service_support_sub' },
 ]
 
 
@@ -168,10 +188,6 @@ const quickLinks = [
 ]
 
 const footerCategories = categories.slice(0, 4)
-
-function catIcon(icon) {
-  return icon || '📦'
-}
 
 function catName(cat) {
   return t(cat.key || cat.id)

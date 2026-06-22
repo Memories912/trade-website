@@ -1,17 +1,18 @@
 export const categories = [
-  { id: 'all', key: 'products.all', icon: '📦' },
-  { id: 'power_tools', key: 'products.power_tools', icon: '🔧' },
-  { id: 'appliances', key: 'products.appliances', icon: '🔌' },
-  { id: 'testers', key: 'products.testers', icon: '📋' },
-  { id: 'cleaners', key: 'products.cleaners', icon: '🧹' },
-  { id: 'laser', key: 'products.laser', icon: '💡' },
-  { id: 'pumps', key: 'products.pumps', icon: '💧' },
+  { id: 'all', key: 'products.all', icon: 'package', name_cn: '全部产品', name_en: 'All Products', name_ko: '전체 제품', name_ja: '全製品' },
+  { id: 'power_tools', key: 'products.power_tools', icon: 'zap', name_cn: '电动工具', name_en: 'Power Tools', name_ko: '전동 도구', name_ja: '電動工具' },
+  { id: 'appliances', key: 'products.appliances', icon: 'plug', name_cn: '家用电器', name_en: 'Appliances', name_ko: '가전제품', name_ja: '家電製品' },
+  { id: 'testers', key: 'products.testers', icon: 'gauge', name_cn: '测试仪', name_en: 'Testers', name_ko: '테스터', name_ja: 'テスター' },
+  { id: 'cleaners', key: 'products.cleaners', icon: 'spray-can', name_cn: '清洗设备', name_en: 'Cleaners', name_ko: '세척 장비', name_ja: '洗浄機器' },
+  { id: 'laser', key: 'products.laser', icon: 'crosshair', name_cn: '激光设备', name_en: 'Laser Equipment', name_ko: '레이저 장비', name_ja: 'レーザー機器' },
+  { id: 'pumps', key: 'products.pumps', icon: 'droplet', name_cn: '水泵', name_en: 'Pumps', name_ko: '펌프', name_ja: 'ポンプ' },
 ]
 
 
 export const products = [
   {
     id: 'cordless-drill',
+    status: 'active',
     name_cn: '18V无刷冲击钻',
     name_en: '18V Brushless Impact Drill',
     name_ko: '18V 무선 임팩트 드릴',
@@ -30,6 +31,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'KC', 'PSE'],
     packaging: '彩盒包装, 1pcs/box, 10boxes/carton',
     lead_time: '30-45 days',
+      price_range: '$28 - $45',
     description_cn: '高品质18V无刷电机冲击钻，适合家庭和专业使用。配备两块4.0Ah锂电池和快速充电器。',
     description_en: 'High quality 18V brushless motor impact drill, suitable for home and professional use. Comes with two 4.0Ah Li-ion batteries and fast charger.',
     description_ko: '고품질 18V 브러시리스 모터 임팩트 드릴, 가정 및 전문가용. 4.0Ah 리튬이온 배터리 2개와 고속 충전기 포함.',
@@ -43,6 +45,7 @@ export const products = [
   },
   {
     id: 'air-fryer',
+    status: 'active',
     name_cn: '5.5L数码空气炸锅',
     name_en: '5.5L Digital Air Fryer',
     name_ko: '5.5L 디지털 에어프라이어',
@@ -61,6 +64,7 @@ export const products = [
     certifications: ['CE', 'KC', 'GS'],
     packaging: '彩盒 + 泡沫内衬, 1pcs/box',
     lead_time: '25-35 days',
+      price_range: '$35 - $60',
     description_cn: '5.5L大容量空气炸锅，数码触控面板，8种预设菜单，少油健康烹饪。',
     description_en: '5.5L large capacity air fryer, digital touch panel, 8 preset menus, healthy low-oil cooking.',
     description_ko: '5.5L 대용량 에어프라이어, 디지털 터치 패널, 8가지 사전 설정 메뉴, 건강한 저유 조리.',
@@ -74,6 +78,7 @@ export const products = [
   },
   {
     id: 'alcohol-tester',
+    status: 'active',
     name_cn: '专业酒精测试仪',
     name_en: 'Professional Alcohol Tester',
     name_ko: '전문 알코올 테스터',
@@ -92,6 +97,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'FDA'],
     packaging: '礼盒包装, 1pcs/box, 50boxes/carton',
     lead_time: '15-20 days',
+      price_range: '$12 - $22',
     description_cn: '高精度燃料电池传感器酒精测试仪，快速准确检测酒精含量，适合警方、企业和个人使用。',
     description_en: 'High-precision fuel cell sensor alcohol tester for fast and accurate BAC detection. Suitable for police, enterprise, and personal use.',
     description_ko: '고정밀 연료 전지 센서 알코올 테스터, 빠르고 정확한 알코올 농도 측정. 경찰, 기업 및 개인용.',
@@ -105,6 +111,7 @@ export const products = [
   },
   {
     id: 'laser-level',
+    status: 'active',
     name_cn: '16线激光水平仪',
     name_en: '16-Line Laser Level',
     name_ko: '16라인 레이저 레벨기',
@@ -123,6 +130,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'FDA'],
     packaging: '铝箱包装, 1pcs/set, 4sets/carton',
     lead_time: '20-30 days',
+      price_range: '$120 - $220',
     description_cn: '16线激光水平仪，自动安平，高精度，适合室内装修和建筑施工。',
     description_en: '16-line laser level with self-leveling function, high precision, suitable for interior decoration and construction.',
     description_ko: '16라인 레이저 레벨기, 자동 레벨링, 고정밀, 실내 인테리어 및 건설 현장에 적합.',
@@ -136,6 +144,7 @@ export const products = [
   },
   {
     id: 'pressure-washer',
+    status: 'active',
     name_cn: '高压清洗机 2000PSI',
     name_en: 'High Pressure Washer 2000PSI',
     name_ko: '고압 세척기 2000PSI',
@@ -154,6 +163,7 @@ export const products = [
     certifications: ['CE', 'ETL', 'KC'],
     packaging: '彩盒包装, 1pcs/box, 2boxes/pallet',
     lead_time: '30-40 days',
+      price_range: '$350 - $800',
     description_cn: '2000PSI高压清洗机，强力去污，适合清洗车辆、庭院、外墙等。',
     description_en: '2000PSI high pressure washer with powerful cleaning capability, ideal for cars, patios, and exterior walls.',
     description_ko: '2000PSI 고압 세척기, 강력한 세척력으로 자동차, patio, 외벽 세척에 적합.',
@@ -167,6 +177,7 @@ export const products = [
   },
   {
     id: 'submersible-pump',
+    status: 'active',
     name_cn: '潜水泵 1.5HP',
     name_en: 'Submersible Pump 1.5HP',
     name_ko: '잠수형 펌프 1.5HP',
@@ -185,6 +196,7 @@ export const products = [
     certifications: ['CE', 'KC', 'ISO9001'],
     packaging: '纸箱 + 泡沫, 1pcs/box',
     lead_time: '25-35 days',
+      price_range: '$18 - $35',
     description_cn: '1.5HP潜水泵，不锈钢外壳，高效节能，适合排水、农业灌溉和污水处理。',
     description_en: '1.5HP submersible pump with stainless steel housing, energy efficient, suitable for drainage, irrigation, and wastewater.',
     description_ko: '1.5HP 잠수형 펌프, 스테인리스 스틸 하우징, 고효율, 배수, 농업용 관개 및 하수 처리에 적합.',
@@ -198,6 +210,7 @@ export const products = [
   },
   {
     id: 'angle-grinder',
+    status: 'active',
     name_cn: '角磨机 4.5" 无刷',
     name_en: 'Angle Grinder 4.5" Brushless',
     name_ko: '앵글 그라인더 4.5" 브러시리스',
@@ -216,6 +229,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'KC', 'PSE'],
     packaging: '彩盒包装, 1pcs/box, 20boxes/carton',
     lead_time: '30-40 days',
+      price_range: '$45 - $85',
     description_cn: '4.5英寸无刷角磨机，轻巧便携，切割打磨多功能，适合金属加工和建筑作业。',
     description_en: '4.5" brushless angle grinder, lightweight and portable, multi-functional cutting and grinding, ideal for metalworking and construction.',
     description_ko: '4.5인치 브러시리스 앵글 그라인더, 가볍고 휴대성 좋음, 다기능 절단 및 연삭, 금속 가공 및 건설 작업에 적합.',
@@ -229,6 +243,7 @@ export const products = [
   },
   {
     id: 'humidifier',
+    status: 'active',
     name_cn: '超声波加湿器 5L',
     name_en: 'Ultrasonic Humidifier 5L',
     name_ko: '초음파 가습기 5L',
@@ -247,6 +262,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'RoHS'],
     packaging: '彩盒包装, 1pcs/box, 12boxes/carton',
     lead_time: '20-30 days',
+      price_range: '$25 - $48',
     description_cn: '5L大容量超声波加湿器，静音运行，智能恒湿，适合家庭和办公室使用。',
     description_en: '5L large capacity ultrasonic humidifier, quiet operation, intelligent humidity control, suitable for home and office.',
     description_ko: '5L 대용량 초음파 가습기, 저소음 작동, 지능형 습도 제어, 가정 및 사무실에 적합.',
@@ -260,6 +276,7 @@ export const products = [
   },
   {
     id: 'circular-saw',
+    status: 'active',
     name_cn: '7-1/4\" 电圆锯 1650W',
     name_en: '7-1/4\" Circular Saw 1650W',
     name_ko: '7-1/4\" 전기 원형톱 1650W',
@@ -278,6 +295,7 @@ export const products = [
     certifications: ['CE', 'KC', 'PSE'],
     packaging: '彩盒+泡沫, 1pcs/box, 10boxes/carton',
     lead_time: '30-40 days',
+      price_range: '$30 - $58',
     description_cn: '1650W大功率电圆锯，切割深度65mm，带激光导引，适用于木工和装修。',
     description_en: '1650W high-power circular saw with 65mm cutting depth, laser guide, ideal for woodworking and renovation.',
     description_ko: '1650W 고출력 전기 원형톱, 65mm 절단 깊이, 레이저 가이드, 목공 및 인테리어에 적합.',
@@ -286,6 +304,7 @@ export const products = [
   },
   {
     id: 'juicer',
+    status: 'active',
     name_cn: '慢磨原汁机',
     name_en: 'Slow Masticating Juicer',
     name_ko: '저속 착즙기',
@@ -304,6 +323,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'RoHS'],
     packaging: '彩盒包装, 1pcs/box, 6boxes/carton',
     lead_time: '25-35 days',
+      price_range: '$15 - $28',
     description_cn: '慢磨挤压技术，保留更多营养，出汁率高，易清洗。',
     description_en: 'Slow squeeze technology for more nutrients, high juice yield, easy to clean.',
     description_ko: '저속 압착 기술로 영양소 보존, 높은 착즙율, 세척 용이.',
@@ -312,6 +332,7 @@ export const products = [
   },
   {
     id: 'gas-detector',
+    status: 'active',
     name_cn: '四合一气体检测仪',
     name_en: '4-in-1 Gas Detector',
     name_ko: '4-in-1 가스 감지기',
@@ -330,6 +351,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'ATEX'],
     packaging: '礼盒包装, 1pcs/box, 40boxes/carton',
     lead_time: '15-25 days',
+      price_range: '$55 - $120',
     description_cn: '四合一气体检测仪，同时检测O2/H2S/CO/LEL，适合工业安全和矿业。',
     description_en: '4-in-1 gas detector for O2/H2S/CO/LEL simultaneously, ideal for industrial safety and mining.',
     description_ko: 'O2/H2S/CO/LEL 동시 감지 4-in-1 가스 감지기, 산업 안전 및 광업용.',
@@ -338,6 +360,7 @@ export const products = [
   },
   {
     id: 'rotary-laser',
+    status: 'active',
     name_cn: '旋转激光水平仪',
     name_en: 'Rotary Laser Level',
     name_ko: '회전 레이저 레벨기',
@@ -356,6 +379,7 @@ export const products = [
     certifications: ['CE', 'FCC', 'FDA'],
     packaging: '铝箱, 1pcs/set, 2sets/carton',
     lead_time: '20-30 days',
+      price_range: '$8 - $18',
     description_cn: '户外旋转激光水平仪，300m探测距离，适合建筑施工和土地平整。',
     description_en: 'Outdoor rotary laser level with 300m detection range, ideal for construction and land leveling.',
     description_ko: '실외 회전 레이저 레벨기, 300m 감지 범위, 건설 및 토지 정지 작업에 적합.',
@@ -364,6 +388,7 @@ export const products = [
   },
   {
     id: 'steam-cleaner',
+    status: 'active',
     name_cn: '蒸汽清洁机 1500W',
     name_en: 'Steam Cleaner 1500W',
     name_ko: '스팀 청소기 1500W',
@@ -390,6 +415,7 @@ export const products = [
   },
   {
     id: 'drain-pump',
+    status: 'active',
     name_cn: '污水潜水泵 0.75HP',
     name_en: 'Sewage Submersible Pump 0.75HP',
     name_ko: '오수 잠수형 펌프 0.75HP',
@@ -416,6 +442,7 @@ export const products = [
   },
   {
     id: 'oscillating-tool',
+    status: 'active',
     name_cn: '多功能震动工具 300W',
     name_en: 'Oscillating Multi-Tool 300W',
     name_ko: '멀티 진동공구 300W',
@@ -442,6 +469,7 @@ export const products = [
   },
   {
     id: 'coffee-grinder',
+    status: 'active',
     name_cn: '电动咖啡研磨机',
     name_en: 'Electric Coffee Grinder',
     name_ko: '전동 커피 그라인더',
@@ -468,6 +496,7 @@ export const products = [
   },
   {
     id: 'ph-meter',
+    status: 'active',
     name_cn: '专业pH测试仪',
     name_en: 'Professional pH Meter',
     name_ko: '전문 pH 측정기',
@@ -494,6 +523,7 @@ export const products = [
   },
   {
     id: 'transfer-pump',
+    status: 'active',
     name_cn: '柴油转移泵 12V',
     name_en: 'Diesel Transfer Pump 12V',
     name_ko: '디젤 이송 펌프 12V',
@@ -591,10 +621,10 @@ export const knowledgeBaseFAQ = [
 ]
 
 export const companyInfo = {
-  name_cn: 'GlobalTrade Pro 供应链有限公司',
-  name_en: 'GlobalTrade Pro Supply Chain Co., Ltd.',
-  name_ko: 'GlobalTrade Pro 공급망 유한회사',
-  name_ja: 'GlobalTrade Pro サプライチェーン株式会社',
+  name_cn: '燕臻进出口有限公司',
+  name_en: 'YanZhen Import & Export Co., Ltd.',
+  name_ko: '옌전수출입 유한회사',
+  name_ja: '燕臻進出口有限公司',
   founded: 2015,
   employees: '80+',
   annualRevenue: '$50M+',

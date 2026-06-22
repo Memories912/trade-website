@@ -4,6 +4,7 @@ import { useAdminAuthStore } from '@/stores/adminAuth'
 const routes = [
   { path: '/', name: 'Home', component: () => import('@/views/Home.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
+  { path: '/pricing', name: 'Pricing', component: () => import('@/views/Pricing.vue') },
   { path: '/products', name: 'Products', component: () => import('@/views/Products.vue') },
   { path: '/products/:id', name: 'ProductDetail', component: () => import('@/views/ProductDetail.vue') },
   { path: '/inquiry', name: 'Inquiry', component: () => import('@/views/Inquiry.vue') },
@@ -17,6 +18,7 @@ const routes = [
     children: [
       { path: 'favorites', name: 'Favorites', component: () => import('@/views/UserFavorites.vue') },
       { path: 'inquiries', name: 'UserInquiries', component: () => import('@/views/UserInquiries.vue') },
+      { path: 'sourcing', name: 'UserSourcing', component: () => import('@/views/UserSourcing.vue') },
     ],
   },
   // Admin routes

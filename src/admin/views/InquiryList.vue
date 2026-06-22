@@ -1,6 +1,12 @@
 <template>
   <div class="flex flex-col min-h-full pl-0">
-    <h1 class="text-xl font-bold text-beike-heading pt-3">{{ t('admin.inquiries.title') }}</h1>
+    <h1 class="text-xl font-bold text-beike-heading pt-3 inline-flex items-center gap-2">
+      {{ t('admin.inquiries.title') }}
+      <span v-if="inquiryStore.totalUnread > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold text-white bg-red-500">
+        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        {{ inquiryStore.totalUnread }} 条未读
+      </span>
+    </h1>
 
     <!-- Search and filters -->
     <div class="flex flex-col sm:flex-row gap-2 pt-3">
@@ -15,7 +21,7 @@
       </div>
       <select
         v-model="list.filters.value.status"
-        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none transition-colors"
+        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none appearance-none transition-colors"
         :class="list.filters.value.status ? 'text-beike-body' : 'text-gray-400'"
       >
         <option value="">{{ t('admin.inquiries.all_status') }}</option>
@@ -49,11 +55,21 @@
           </div>
         </template>
         <template #status="{ row }">
-          <StatusBadge :status="row.status" />
+          <div class="flex items-center gap-2">
+            <StatusBadge :status="row.status" />
+            <span v-if="row.unreadMessages > 0"
+                  @click.stop="inquiryStore.markAsRead(row.id)"
+                  class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-orange-400 cursor-pointer hover:bg-orange-500 transition-colors"
+                  title="点击标记已读">
+              <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              {{ row.unreadMessages }}
+            </span>
+          </div>
         </template>
         <template #actions="{ row }">
           <router-link
             :to="'/admin/inquiries/' + row.id"
+            @click="handleView(row)"
             class="px-3 py-1.5 rounded-md text-xs text-beike-primary hover:bg-beike-primary-light transition-colors"
           >
             {{ t('admin.common.view') }}
@@ -113,4 +129,11 @@ onMounted(() => {
   inquiryStore.fetchInquiries()
   list.load()
 })
+
+function handleView(row) {
+  inquiryStore.markAsRead(row.id)
+  if (row.status === 'pending') {
+    inquiryStore.updateStatus(row.id, 'processing')
+  }
+}
 </script>

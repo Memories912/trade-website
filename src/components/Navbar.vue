@@ -25,9 +25,11 @@
                 :key="lang.code"
                 @click="switchLang(lang.code)"
                 class="flex w-full items-center gap-2 px-3 py-2 text-xs text-beike-muted hover:text-beike-primary hover:bg-gray-50 transition-colors"
+                :class="locale === lang.code ? 'text-beike-primary font-semibold' : ''"
               >
                 <span>{{ lang.flag }}</span>
-                <span>{{ lang.label }}</span>
+                <span class="flex-1 text-left">{{ lang.label }}</span>
+                <svg v-if="locale === lang.code" class="w-3.5 h-3.5 text-beike-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
               </button>
             </div>
           </div>
@@ -50,7 +52,7 @@
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span>{{ $t("topbar.email") }}</span>
+            <span>{{ $t("topbar.email").replace('[at]', '@') }}</span>
           </a>
         </div>
       </div>
@@ -61,8 +63,12 @@
       <div class="container-custom flex items-center justify-between h-16 lg:h-20">
         <!-- Logo -->
         <router-link to="/" class="flex items-center gap-2 shrink-0">
-          <div class="w-8 h-8 rounded-lg bg-beike-primary flex items-center justify-center text-white font-bold text-lg">
-            B
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-beike-primary to-[#ff7a2f] flex items-center justify-center shadow-sm">
+            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              <path d="M19 5l-3 3 3 3M5 19l3-3-3-3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
           </div>
           <div class="hidden sm:block">
             <div class="text-base font-bold text-beike-heading leading-tight">{{ $t('nav.brand_name') }}</div>
@@ -183,10 +189,11 @@
                 v-for="lang in languageStore.availableLocales"
                 :key="lang.code"
                 @click="switchLang(lang.code); mobileOpen = false"
-                class="px-2.5 py-1 text-xs rounded-md border transition-colors"
+                class="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-md border transition-colors"
                 :class="locale === lang.code ? 'border-beike-primary text-beike-primary bg-beike-primary-light' : 'border-gray-200 text-beike-muted hover:border-gray-300'"
               >
                 {{ lang.flag }} {{ lang.label }}
+                <svg v-if="locale === lang.code" class="w-3 h-3 text-beike-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
               </button>
             </div>
           </div>
@@ -219,6 +226,7 @@ const mobileOpen = ref(false)
 const navItems = [
   { path: '/', label: 'nav.home' },
   { path: '/products', label: 'nav.products' },
+  { path: '/pricing', label: 'nav.pricing' },
   { path: '/inquiry', label: 'nav.inquiry' },
   { path: '/knowledge', label: 'nav.knowledge' },
   { path: '/contact', label: 'nav.contact' },

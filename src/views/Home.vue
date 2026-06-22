@@ -58,7 +58,7 @@
     </section>
 
     <!-- ======== Featured Products (BeikeShop style) ======== -->
-    <section class="py-12 md:py-20 scroll-reveal" ref="sectionRefs" data-index="0">
+    <section class="py-12 md:py-20 bg-white scroll-reveal" ref="sectionRefs" data-index="0">
       <div class="container-custom">
         <div class="text-center mb-10">
           <h2 class="section-title-custom">{{ $t('home.featured_title') }}</h2>
@@ -88,13 +88,21 @@
                 </button>
               </div>
             </div>
-            <div class="p-3 md:p-4 text-center">
-              <span class="badge-custom bg-beike-primary-light text-beike-primary text-[10px] mb-2">
-                {{ getCategoryLabel(product.category) }}
-              </span>
-              <h3 class="text-sm font-bold text-beike-heading line-clamp-1 mb-1">{{ productName(product) }}</h3>
-              <div class="price-new text-sm">{{ getPrice(product, "home.price_contact") }}</div>
-            </div>
+              <div class="p-3 md:p-4 text-center">
+                <span class="badge-custom bg-beike-primary-light text-beike-primary text-[10px] mb-2 inline-flex items-center gap-1">
+                  <component :is="iconMap[getCategoryIcon(product.category)] || iconMap['package']" class="w-3 h-3" />
+                  {{ getCategoryLabel(product.category) }}
+                </span>
+                <h3 class="text-sm font-bold text-beike-heading line-clamp-1 mb-1">{{ productName(product) }}</h3>
+                <div v-if="product.price_range" class="text-sm font-bold text-beike-primary mb-2">{{ product.price_range }}</div>
+                <div class="flex items-center justify-center gap-3 text-xs text-beike-muted mb-3">
+                  <span class="badge-gray">MOQ: {{ product.moq }}</span>
+                  <span class="badge-gray">{{ product.lead_time }}</span>
+                </div>
+                <router-link :to="`/products/${product.id}`" class="btn-primary-custom text-xs px-4 py-2 w-full justify-center inline-flex">
+                  {{ $t('products.inquiry_now') }}
+                </router-link>
+              </div>
           </div>
         </div>
 
@@ -110,7 +118,7 @@
     </section>
 
     <!-- ======== Categories (BeikeShop style) ======== -->
-    <section class="py-12 md:py-20 bg-[#f6f6f8] scroll-reveal" ref="sectionRefs" data-index="1">
+    <section class="py-12 md:py-20 bg-orange-50/50 scroll-reveal" ref="sectionRefs" data-index="1">
       <div class="container-custom">
         <div class="text-center mb-10">
           <h2 class="section-title-custom">{{ $t('home.categories_title') }}</h2>
@@ -124,15 +132,43 @@
                class="bg-white rounded-xl border border-gray-200 p-6 text-center cursor-pointer
                       transition-all duration-300 hover:shadow-card-hover hover:border-beike-primary/30 hover:-translate-y-1"
           >
-            <div class="text-4xl mb-3">{{ cat.icon || '📦' }}</div>
+            <div class="w-10 h-10 mx-auto mb-3 rounded-lg bg-beike-primary-light flex items-center justify-center">
+              <component :is="iconMap[cat.icon] || iconMap['package']" class="w-5 h-5 text-beike-primary" />
+            </div>
             <h3 class="text-sm font-bold text-beike-heading">{{ catName(cat) }}</h3>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ======== Why Choose Us ======== -->
+    <!-- ======== How it Works ======== -->
     <section class="py-12 md:py-20 scroll-reveal" ref="sectionRefs" data-index="2">
+      <div class="container-custom">
+        <div class="text-center mb-10">
+          <h2 class="section-title-custom">{{ $t('home.how_title') }}</h2>
+          <div class="wave-line wave-line-primary mt-3"></div>
+          <p class="section-sub-title">{{ $t('home.how_subtitle') }}</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div v-for="(step, idx) in howSteps" :key="idx" class="text-center">
+            <div class="relative">
+              <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-beike-primary-light flex items-center justify-center">
+                <component :is="iconMap[step.icon] || iconMap['file-text']" class="w-7 h-7 text-beike-primary" />
+              </div>
+              <!-- Connector line -->
+              <div v-if="idx < howSteps.length - 1" class="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-beike-primary/20 -z-10"></div>
+            </div>
+            <div class="w-7 h-7 mx-auto mb-2 rounded-full bg-beike-primary text-white text-xs font-bold flex items-center justify-center relative z-10">{{ idx + 1 }}</div>
+            <h3 class="text-sm font-bold text-beike-heading mb-1">{{ t(step.titleKey) }}</h3>
+            <p class="text-xs text-beike-muted leading-relaxed">{{ t(step.descKey) }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== Why Choose Us ======== -->
+    <section class="py-12 md:py-20 bg-white scroll-reveal" ref="sectionRefs" data-index="3">
       <div class="container-custom">
         <div class="text-center mb-10">
           <h2 class="section-title-custom">{{ $t('home.why_title') }}</h2>
@@ -145,7 +181,7 @@
                class="bg-white rounded-xl border border-gray-200 p-8 text-center
                       transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1">
             <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-beike-primary-light flex items-center justify-center">
-              <span class="text-2xl">{{ item.icon }}</span>
+              <component :is="iconMap[item.icon]" class="w-7 h-7 text-beike-primary" />
             </div>
             <h3 class="text-lg font-bold text-beike-heading mb-3">{{ t(item.titleKey) }}</h3>
             <p class="text-sm text-beike-muted leading-relaxed">{{ t(item.descKey) }}</p>
@@ -155,23 +191,21 @@
     </section>
 
     <!-- ======== CTA Banner ======== -->
-    <section class="py-16 md:py-24 bg-beike-primary scroll-reveal" ref="sectionRefs" data-index="3">
+    <section class="py-16 md:py-24 bg-beike-primary scroll-reveal" ref="sectionRefs" data-index="4">
       <div class="container-custom text-center">
         <h2 class="text-2xl md:text-4xl font-bold text-white mb-4">{{ $t('home.cta_title') }}</h2>
         <p class="text-white/80 max-w-xl mx-auto mb-8 text-sm md:text-base">
           {{ $t('home.cta_desc') }}
         </p>
-        <div class="flex justify-center gap-4">
-          <router-link to="/inquiry" class="inline-flex items-center gap-2 bg-white text-beike-primary font-bold px-8 py-3.5 rounded-md hover:bg-gray-100 transition-all">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            {{ $t("home.cta_inquiry") }}
-          </router-link>
-          <router-link to="/contact" class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-3.5 rounded-md hover:bg-white/10 transition-all">
-            {{ $t("home.cta_contact") }}
-          </router-link>
-        </div>
+          <div class="flex justify-center gap-4">
+            <router-link to="/inquiry" class="inline-flex items-center gap-2 bg-white text-beike-primary font-bold px-8 py-3.5 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
+              <SendIcon class="w-4 h-4" />
+              {{ $t("home.cta_inquiry") }}
+            </router-link>
+            <router-link to="/contact" class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-3.5 rounded-full hover:bg-white/10 transition-all duration-300">
+              {{ $t("home.cta_contact") }}
+            </router-link>
+          </div>
       </div>
     </section>
   </div>
@@ -183,10 +217,30 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { products, categories } from '@/assets/mock/products'
 import { useFavoriteStore } from '@/stores/favorites'
+import { Factory, BadgeCheck, Globe, Package, Image, Send, FileText, MessageSquare, Zap, Plug, Search, SprayCan, Crosshair, Cog, Gauge, Droplet } from 'lucide-vue-next'
 
 const { locale, t } = useI18n()
 const router = useRouter()
 const favStore = useFavoriteStore()
+
+const iconMap = {
+  'factory': Factory,
+  'badge-check': BadgeCheck,
+  'globe': Globe,
+  'package': Package,
+  'image': Image,
+  'file-text': FileText,
+  'message-square': MessageSquare,
+  'send': Send,
+  'zap': Zap,
+  'plug': Plug,
+  'search': Search,
+  'spray-can': SprayCan,
+  'crosshair': Crosshair,
+  'cog': Cog,
+  'gauge': Gauge,
+  'droplet': Droplet,
+}
 
 const fallbackImg = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect fill='%23f1f5f9' width='600' height='400'/><text x='300' y='210' text-anchor='middle' fill='%2394a3b8' font-size='20'>📷</text></svg>`)}`
 function onImgError(e) { e.target.src = fallbackImg }
@@ -219,7 +273,7 @@ function resetCarousel() {
 }
 
 // ======== Product data ========
-const featuredProducts = computed(() => products.slice(0, 4))
+const featuredProducts = computed(() => products.filter(p => p.status !== 'inactive').slice(0, 4))
 
 function productName(product) {
   const lang = locale.value
@@ -251,10 +305,22 @@ function getCategoryLabel(catId) {
   return cat ? t(cat.key) : catId
 }
 
+function getCategoryIcon(catId) {
+  const cat = categories.find(c => c.id === catId)
+  return cat ? cat.icon : 'package'
+}
+
+const howSteps = [
+  { icon: 'file-text', titleKey: 'home.how_step1_title', descKey: 'home.how_step1_desc' },
+  { icon: 'message-square', titleKey: 'home.how_step2_title', descKey: 'home.how_step2_desc' },
+  { icon: 'package', titleKey: 'home.how_step3_title', descKey: 'home.how_step3_desc' },
+  { icon: 'badge-check', titleKey: 'home.how_step4_title', descKey: 'home.how_step4_desc' },
+]
+
 const features = [
-  { icon: "🏭", titleKey: "home.feature_factory", descKey: "home.feature_factory_desc" },
-  { icon: "✅", titleKey: "home.feature_quality", descKey: "home.feature_quality_desc" },
-  { icon: "🌍", titleKey: "home.feature_logistics", descKey: "home.feature_logistics_desc" },
+  { icon: 'factory', titleKey: "home.feature_factory", descKey: "home.feature_factory_desc" },
+  { icon: 'badge-check', titleKey: "home.feature_quality", descKey: "home.feature_quality_desc" },
+  { icon: 'globe', titleKey: "home.feature_logistics", descKey: "home.feature_logistics_desc" },
 ]
 
 // ======== Scroll Reveal ========

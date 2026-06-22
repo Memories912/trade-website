@@ -13,7 +13,9 @@
       <div class="max-w-3xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-10">
-          <div class="text-5xl mb-3">🔍</div>
+          <div class="text-5xl mb-3 text-beike-primary">
+            <component :is="iconMap.search" class="w-12 h-12 mx-auto" />
+          </div>
           <h1 class="text-2xl md:text-3xl font-bold text-beike-heading">{{ $t('sourcing.title') }}</h1>
           <p class="text-sm text-beike-muted mt-2 max-w-lg mx-auto leading-relaxed">
             {{ $t('sourcing.subtitle') }}
@@ -22,7 +24,9 @@
 
         <!-- Success Message -->
         <div v-if="submitted" class="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-          <div class="text-5xl mb-3">✅</div>
+          <div class="text-5xl mb-3 text-green-500">
+            <component :is="iconMap.badge-check" class="w-12 h-12 mx-auto" />
+          </div>
           <h2 class="text-xl font-bold text-green-700 mb-2">{{ $t('sourcing.success_title') }}</h2>
           <p class="text-sm text-green-600 mb-2">{{ $t('sourcing.success_msg') }}</p>
           <p class="text-xs text-green-500 mb-6">{{ $t('sourcing.request_id') }}: <span class="font-bold">{{ requestId }}</span></p>
@@ -72,7 +76,9 @@
                   :class="{ 'border-beike-primary bg-beike-primary-light/20': dragOver }"
                 >
                   <template v-if="photos.length === 0">
-                    <div class="text-3xl mb-2">📸</div>
+                    <div class="text-3xl mb-2 text-beike-light">
+                      <component :is="iconMap.camera" class="w-8 h-8 mx-auto" />
+                    </div>
                     <p class="text-sm text-beike-muted">{{ $t('sourcing.upload_hint') }}</p>
                     <p class="text-xs text-beike-light mt-1">{{ $t('sourcing.upload_format') }}</p>
                   </template>
@@ -231,7 +237,7 @@
         <div class="grid md:grid-cols-4 gap-6">
           <div v-for="(step, idx) in steps" :key="idx" class="text-center">
             <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-beike-primary-light flex items-center justify-center">
-              <span class="text-2xl">{{ step.icon }}</span>
+              <component :is="iconMap[step.icon] || iconMap['file-text']" class="w-7 h-7 text-beike-primary" />
             </div>
             <div class="w-7 h-7 mx-auto mb-2 rounded-full bg-beike-primary text-white text-xs font-bold flex items-center justify-center">{{ idx + 1 }}</div>
             <h3 class="text-sm font-bold text-beike-heading mb-1">{{ $t(step.titleKey) }}</h3>
@@ -247,6 +253,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSourcingStore } from '@/stores/sourcing'
+import { Search, BadgeCheck, FileText, Camera, MessageSquare, Package, Lightbulb } from 'lucide-vue-next'
 
 const { t, locale } = useI18n()
 const store = useSourcingStore()
@@ -260,11 +267,21 @@ const currencyMap = {
 const currencySymbol = computed(() => currencyMap[locale.value] || '$')
 
 const steps = [
-  { icon: '📝', titleKey: 'sourcing.step1_title', descKey: 'sourcing.step1_desc' },
-  { icon: '📸', titleKey: 'sourcing.step2_title', descKey: 'sourcing.step2_desc' },
-  { icon: '💬', titleKey: 'sourcing.step3_title', descKey: 'sourcing.step3_desc' },
-  { icon: '📦', titleKey: 'sourcing.step4_title', descKey: 'sourcing.step4_desc' },
+  { icon: 'file-text', titleKey: 'sourcing.step1_title', descKey: 'sourcing.step1_desc' },
+  { icon: 'camera', titleKey: 'sourcing.step2_title', descKey: 'sourcing.step2_desc' },
+  { icon: 'message-square', titleKey: 'sourcing.step3_title', descKey: 'sourcing.step3_desc' },
+  { icon: 'package', titleKey: 'sourcing.step4_title', descKey: 'sourcing.step4_desc' },
 ]
+
+const iconMap = {
+  'file-text': FileText,
+  'camera': Camera,
+  'message-square': MessageSquare,
+  'package': Package,
+  'search': Search,
+  'badge-check': BadgeCheck,
+  'lightbulb': Lightbulb,
+}
 
 const defaultForm = () => ({
   productName: '',

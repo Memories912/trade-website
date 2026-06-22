@@ -24,12 +24,12 @@
       </div>
       <select
         v-model="list.filters.value.category"
-        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none transition-colors"
+        class="sm:flex-1 w-full px-3 py-2 rounded-lg border border-beike-border text-sm bg-white focus:border-beike-primary outline-none appearance-none transition-colors"
         :class="list.filters.value.category ? 'text-beike-body' : 'text-gray-400'"
       >
         <option value="">{{ t('admin.products.all_categories') }}</option>
         <option v-for="cat in productStore.categories.filter(c => c.id !== 'all')" :key="cat.id" :value="cat.id">
-          {{ cat.key }}
+          {{ cat.name_cn }}
         </option>
       </select>
     </div>
@@ -48,13 +48,10 @@
           <img :src="row.image" :alt="row.name_en" class="w-10 h-10 rounded-lg object-cover" />
         </template>
         <template #name_en="{ row }">
-          <div>
-            <p class="font-medium text-beike-heading">{{ row.name_en }}</p>
-            <p class="text-xs text-beike-muted">{{ row.name_cn }}</p>
-          </div>
+          <span class="font-medium text-beike-heading">{{ row.name_cn }}</span>
         </template>
         <template #category="{ row }">
-          <span class="text-sm text-beike-body">{{ row.category }}</span>
+          <span class="text-sm text-beike-body">{{ getCategoryCn(row.category) }}</span>
         </template>
         <template #moq="{ row }">
           <span class="text-sm text-beike-body">{{ row.moq }}</span>
@@ -151,6 +148,11 @@ onMounted(() => {
 function confirmDelete(product) {
   deleteTarget.value = product
   showDeleteConfirm.value = true
+}
+
+function getCategoryCn(catId) {
+  const cat = productStore.categories.find(c => c.id === catId)
+  return cat ? cat.name_cn : catId
 }
 
 function doDelete() {
