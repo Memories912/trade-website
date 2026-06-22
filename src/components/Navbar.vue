@@ -126,9 +126,13 @@
                     {{ $t('nav.my_favorites') }}
                     <span v-if="favStore.count > 0" class="ml-auto text-xs text-beike-primary bg-beike-primary-light px-1.5 py-0.5 rounded-full font-bold">{{ favStore.count }}</span>
                   </button>
-                  <button @click="$router.push('/inquiry'); userMenuOpen=false" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-beike-body hover:bg-gray-50 transition-colors">
+                  <button @click="$router.push('/user/inquiries'); userMenuOpen=false" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-beike-body hover:bg-gray-50 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     {{ $t('nav.my_inquiries') }}
+                  </button>
+                  <button @click="$router.push('/user/sourcing'); userMenuOpen=false" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-beike-body hover:bg-gray-50 transition-colors">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    {{ $t('nav.my_sourcing') }}
                   </button>
                   <button @click="userStore.logout()" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
