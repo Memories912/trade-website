@@ -70,8 +70,8 @@ import { useAdminAuth } from '@/admin/composables/useAdminAuth'
 const { t } = useI18n()
 const { login } = useAdminAuth()
 
-const email = ref('')
-const password = ref('')
+const email = ref('admin@trade.com')
+const password = ref('admin123')
 const loading = ref(false)
 const error = ref('')
 

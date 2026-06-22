@@ -18,12 +18,13 @@
         <form v-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.email") }}</label>
-            <input v-model="loginForm.email" type="email" class="input-custom" placeholder="your@email.com" required />
+            <input v-model="loginForm.email" type="email" class="input-custom" placeholder="demo@yanzhen.com" required />
           </div>
           <div>
             <label class="block text-sm font-medium text-beike-heading mb-1">{{ $t("common.password") }}</label>
-            <input v-model="loginForm.password" type="password" class="input-custom" placeholder="••••••••" required />
+            <input v-model="loginForm.password" type="password" class="input-custom" placeholder="demo123" required />
           </div>
+          <p class="text-[11px] text-beike-muted -mt-2">演示账号：demo@yanzhen.com / demo123</p>
           <div class="flex items-center justify-between text-sm">
             <label class="flex items-center gap-1.5 text-beike-muted cursor-pointer">
               <input type="checkbox" class="rounded border-gray-300 text-beike-primary focus:ring-beike-primary" />
@@ -151,7 +152,7 @@ const tabs = [
 ]
 const activeTab = ref('login')
 
-const loginForm = reactive({ email: '', password: '' })
+const loginForm = reactive({ email: 'demo@yanzhen.com', password: 'demo123' })
 const loginLoading = ref(false)
 const loginError = ref('')
 

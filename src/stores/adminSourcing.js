@@ -8,6 +8,7 @@ export const useAdminSourcingStore = defineStore('adminSourcing', () => {
 
   const pendingCount = computed(() => requests.value.filter(r => r.status === 'pending').length)
   const totalCount = computed(() => requests.value.length)
+  const totalUnread = computed(() => requests.value.reduce((sum, r) => sum + (r.unreadMessages || 0), 0))
 
   /** Simulate fetching requests */
   function fetchRequests() {
@@ -46,8 +47,16 @@ export const useAdminSourcingStore = defineStore('adminSourcing', () => {
     return null
   }
 
+  /** Mark user messages as read */
+  function markAsRead(id) {
+    const idx = requests.value.findIndex(r => r.id === id)
+    if (idx !== -1) {
+      requests.value[idx].unreadMessages = 0
+    }
+  }
+
   return {
-    requests, loading, pendingCount, totalCount,
-    fetchRequests, getRequest, updateStatus, addQuote,
+    requests, loading, pendingCount, totalCount, totalUnread,
+    fetchRequests, getRequest, updateStatus, addQuote, markAsRead,
   }
 })
